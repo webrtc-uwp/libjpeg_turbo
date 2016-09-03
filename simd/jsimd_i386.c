@@ -46,6 +46,7 @@ init_simd (void)
 
   simd_support = jpeg_simd_cpu_support();
 
+#ifndef WINRT
   /* Force different settings through environment variables */
   env = getenv("JSIMD_FORCEMMX");
   if ((env != NULL) && (strcmp(env, "1") == 0))
@@ -59,6 +60,7 @@ init_simd (void)
   env = getenv("JSIMD_FORCESSE2");
   if ((env != NULL) && (strcmp(env, "1") == 0))
     simd_support &= JSIMD_SSE2;
+#endif
 }
 
 #ifndef JPEG_DECODE_ONLY

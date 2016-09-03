@@ -98,7 +98,7 @@
       'conditions': [
         [ 'OS!="win"', {'product_name': 'jpeg_turbo'}],
         # Add target-specific source files.
-        [ 'target_arch=="ia32"', {
+        [ 'target_arch=="ia32" and winrt_platform!="win_phone" and  winrt_platform!="win10_arm"', {
           'sources': [
             'simd/jsimd_i386.c',
             'simd/jccolmmx.asm',
@@ -154,6 +154,11 @@
             'simd/jiss2fst-64.asm',
             'simd/jiss2int-64.asm',
             'simd/jiss2red-64.asm',
+          ],
+        }],
+        ['OS_RUNTIME == "winrt" and (winrt_platform=="win_phone" or winrt_platform=="win10_arm") ', {
+          'sources': [
+            'jsimd_none.c',
           ],
         }],
         # MemorySanitizer doesn't support assembly code, so keep it disabled in
