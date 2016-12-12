@@ -49,10 +49,14 @@ init_simd (void)
   simd_support = JSIMD_SSE2 | JSIMD_SSE;
 
   /* Force different settings through environment variables */
+#ifndef WINRT
   env = getenv("JSIMD_FORCENONE");
+#endif
   if ((env != NULL) && (strcmp(env, "1") == 0))
     simd_support = 0;
+#ifndef WINRT
   env = getenv("JSIMD_NOHUFFENC");
+#endif
   if ((env != NULL) && (strcmp(env, "1") == 0))
     simd_huffman = 0;
 }
