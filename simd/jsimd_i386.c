@@ -48,7 +48,6 @@ init_simd (void)
 
   simd_support = jpeg_simd_cpu_support();
 
-#ifndef WINRT
   /* Force different settings through environment variables */
   env = getenv("JSIMD_FORCEMMX");
   if ((env != NULL) && (strcmp(env, "1") == 0))
@@ -68,7 +67,6 @@ init_simd (void)
   env = getenv("JSIMD_NOHUFFENC");
   if ((env != NULL) && (strcmp(env, "1") == 0))
     simd_huffman = 0;
-#endif
 }
 
 GLOBAL(int)
