@@ -98,7 +98,7 @@
       'conditions': [
         [ 'OS!="win"', {'product_name': 'jpeg_turbo'}],
         # Add target-specific source files.
-        [ 'target_arch=="ia32" and winrt_platform!="win_phone" and  winrt_platform!="win10_arm"', {
+        [ 'target_arch=="ia32" and winuwp_platform!="win_phone" and  winuwp_platform!="win10_arm"', {
           'sources': [
             'simd/jsimd_i386.c',
             'simd/jccolor-mmx.asm', 
@@ -158,7 +158,7 @@
             'simd/jquanti-sse2-64.asm',
           ],
         }],
-        ['OS_RUNTIME == "winrt" and (winrt_platform=="win_phone" or winrt_platform=="win10_arm") ', {
+        ['OS_RUNTIME == "winuwp" and (winuwp_platform=="win_phone" or winuwp_platform=="win10_arm") ', {
           'sources': [
             'jsimd_none.c',
           ],
