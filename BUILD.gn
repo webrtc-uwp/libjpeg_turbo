@@ -99,7 +99,45 @@ if (current_cpu == "x86" || current_cpu == "x64") {
   }
 }
 
+if (current_cpu == "arm" || current_cpu == "arm64") {
+  jsimd_arm_asm_sources = []
+  if (current_cpu == "arm") {
+    jsimd_arm_asm_sources += [ "simd/jsimd_arm_neon.S" ]
+  } else {
+    jsimd_arm_asm_sources += [ "simd/jsimd_arm64_neon.S" ]
+  }
+
+  action_foreach("compile_jsimd_arm_assembly") {
+    if (is_win) {
+      script = "//webrtc/build/Win_ARM_Tools/run_arm_asm_compiler.py"
+    } else {
+      script = "//third_party/openmax_dl/dl/run_perl.py"
+    }
+    sources = jsimd_arm_asm_sources
+    outputs = [
+      "$target_gen_dir/{{source_file_part}}.obj",
+    ]
+
+    args = [
+      "-s",
+      "../../webrtc/build/gas-preprocessor/gas-preprocessor.pl",
+      "-i",
+      "{{source}}",
+      "-o",
+      rebase_path("$target_gen_dir/{{source_file_part}}.obj"),
+      "-p",
+      "environment.store_" + current_cpu,
+      "-l",
+      "../../",
+      "-a",
+      current_cpu
+    ]
+  }
+
+}
+  
 static_library("simd") {
+
   if (current_cpu == "x86") {
     deps = [
       ":simd_asm",
@@ -114,17 +152,31 @@ static_library("simd") {
     sources = [
       "simd/jsimd_x86_64.c",
     ]
-  } else if (current_cpu == "arm" && arm_version >= 7 &&
-             (arm_use_neon || arm_optionally_use_neon)) {
+  } else if ((current_cpu == "arm" && arm_version >= 7 &&
+             (arm_use_neon || arm_optionally_use_neon))) {
     sources = [
-      "simd/jsimd_arm.c",
-      "simd/jsimd_arm_neon.S",
+      "simd/jsimd_arm.c"
     ]
+    if (current_os == "winuwp" && target_os == "winuwp") {
+      sources += get_target_outputs(":compile_jsimd_arm_assembly")
+      deps = [
+        ":compile_jsimd_arm_assembly",
+      ]
+    } else {
+      sources += jsimd_arm_asm_sources
+    }
   } else if (current_cpu == "arm64") {
     sources = [
-      "simd/jsimd_arm64.c",
-      "simd/jsimd_arm64_neon.S",
+      "simd/jsimd_arm64.c"
     ]
+    if (current_os == "winuwp" && target_os == "winuwp") {
+      sources += get_target_outputs(":compile_jsimd_arm_assembly")
+      deps = [
+        ":compile_jsimd_arm_assembly",
+      ]
+    } else {
+      sources += jsimd_arm_asm_sources
+    }
   } else {
     sources = [
       "jsimd_none.c",
