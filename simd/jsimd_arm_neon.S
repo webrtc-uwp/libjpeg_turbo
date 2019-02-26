@@ -185,7 +185,7 @@ _\fname:
 #define XFIX_3_072711026_MINUS_2_562915447 d2[2]
 #define XFIX_1_175875602_MINUS_1_961570560 d2[3]
 
-.balign 16
+.align 4
 jsimd_idct_islow_neon_consts:
   .short FIX_0_899976223                    /* d0[0] */
   .short FIX_0_541196100                    /* d0[1] */
@@ -272,20 +272,20 @@ asm_function jsimd_idct_islow_neon
       push            {r4, r5}
     vmlal.s16       q7, d5, XFIX_1_175875602_MINUS_0_390180644
     vsubl.s16       q3, ROW0L, ROW4L
-      ldrd            r4, [COEF_BLOCK, #(-96 + 2 * (4 + 1 * 8))]
+      ldrd            r4, r5, [COEF_BLOCK, #(-96 + 2 * (4 + 1 * 8))]
     vmull.s16       q2, ROW2L, XFIX_0_541196100
     vmlal.s16       q2, ROW6L, XFIX_0_541196100_MINUS_1_847759065
       orr             r0, r4, r5
     vmov            q4, q6
     vmlsl.s16       q6, ROW5L, XFIX_2_562915447
-      ldrd            r4, [COEF_BLOCK, #(-96 + 2 * (4 + 2 * 8))]
+      ldrd            r4, r5, [COEF_BLOCK, #(-96 + 2 * (4 + 2 * 8))]
     vmlal.s16       q6, ROW3L, XFIX_3_072711026_MINUS_2_562915447
     vshl.s32        q3, q3, #13
       orr             r0, r0, r4
     vmlsl.s16       q4, ROW1L, XFIX_0_899976223
       orr             r0, r0, r5
     vadd.s32        q1, q3, q2
-      ldrd            r4, [COEF_BLOCK, #(-96 + 2 * (4 + 3 * 8))]
+      ldrd            r4, r5, [COEF_BLOCK, #(-96 + 2 * (4 + 3 * 8))]
     vmov            q5, q7
     vadd.s32        q1, q1, q6
       orr             r0, r0, r4
@@ -293,7 +293,7 @@ asm_function jsimd_idct_islow_neon
       orr             r0, r0, r5
     vmlal.s16       q7, ROW1L, XFIX_1_501321110_MINUS_0_899976223
     vrshrn.s32      ROW1L, q1, #11
-      ldrd            r4, [COEF_BLOCK, #(-96 + 2 * (4 + 4 * 8))]
+      ldrd            r4, r5, [COEF_BLOCK, #(-96 + 2 * (4 + 4 * 8))]
     vsub.s32        q1, q1, q6
     vmlal.s16       q5, ROW5L, XFIX_2_053119869_MINUS_2_562915447
       orr             r0, r0, r4
@@ -301,21 +301,21 @@ asm_function jsimd_idct_islow_neon
       orr             r0, r0, r5
     vsub.s32        q1, q1, q6
     vmull.s16       q6, ROW2L, XFIX_0_541196100_PLUS_0_765366865
-      ldrd            r4, [COEF_BLOCK, #(-96 + 2 * (4 + 5 * 8))]
+      ldrd            r4, r5, [COEF_BLOCK, #(-96 + 2 * (4 + 5 * 8))]
     vmlal.s16       q6, ROW6L, XFIX_0_541196100
     vsub.s32        q3, q3, q2
       orr             r0, r0, r4
     vrshrn.s32      ROW6L, q1, #11
       orr             r0, r0, r5
     vadd.s32        q1, q3, q5
-      ldrd            r4, [COEF_BLOCK, #(-96 + 2 * (4 + 6 * 8))]
+      ldrd            r4, r5, [COEF_BLOCK, #(-96 + 2 * (4 + 6 * 8))]
     vsub.s32        q3, q3, q5
     vaddl.s16       q5, ROW0L, ROW4L
       orr             r0, r0, r4
     vrshrn.s32      ROW2L, q1, #11
       orr             r0, r0, r5
     vrshrn.s32      ROW5L, q3, #11
-      ldrd            r4, [COEF_BLOCK, #(-96 + 2 * (4 + 7 * 8))]
+      ldrd            r4, r5, [COEF_BLOCK, #(-96 + 2 * (4 + 7 * 8))]
     vshl.s32        q5, q5, #13
     vmlal.s16       q4, ROW7L, XFIX_0_298631336_MINUS_0_899976223
       orr             r0, r0, r4
@@ -323,7 +323,7 @@ asm_function jsimd_idct_islow_neon
       orrs            r0, r0, r5
     vsub.s32        q1, q5, q6
     vadd.s32        q6, q2, q7
-      ldrd            r4, [COEF_BLOCK, #(-96 + 2 * (4 + 0 * 8))]
+      ldrd            r4, r5, [COEF_BLOCK, #(-96 + 2 * (4 + 0 * 8))]
     vsub.s32        q2, q2, q7
     vadd.s32        q5, q1, q4
       orr             r0, r4, r5
@@ -700,7 +700,7 @@ asm_function jsimd_idct_islow_neon
 #define XFIX_1_847759065 d0[2]
 #define XFIX_2_613125930 d0[3]
 
-.balign 16
+.align 4
 jsimd_idct_ifast_neon_consts:
   .short (277 * 128 - 256 * 128)  /* XFIX_1_082392200 */
   .short (362 * 128 - 256 * 128)  /* XFIX_1_414213562 */
@@ -938,7 +938,7 @@ asm_function jsimd_idct_ifast_neon
 #define FIX_2_562915447 (20995)  /* FIX(2.562915447) */
 #define FIX_3_624509785 (29692)  /* FIX(3.624509785) */
 
-.balign 16
+.align 4
 jsimd_idct_4x4_neon_consts:
   .short FIX_1_847759065      /* d0[0] */
   .short -FIX_0_765366865     /* d0[1] */
@@ -1130,7 +1130,7 @@ asm_function jsimd_idct_4x4_neon
  *       bit exact compatibility with jpeg-6b.
  */
 
-.balign 8
+.align 3
 jsimd_idct_2x2_neon_consts:
   .short -FIX_0_720959822  /* d0[0] */
   .short FIX_0_850430095   /* d0[1] */
@@ -1471,7 +1471,7 @@ asm_function jsimd_idct_2x2_neon
  * But this requires a copy of these constants for each function.
  */
 
-.balign 16
+.align 4
 jsimd_ycc_\colorid\()_neon_consts:
   .short 0,      0,     0,      0
   .short 22971, -11277, -23401, 29033
@@ -1487,7 +1487,7 @@ asm_function jsimd_ycc_\colorid\()_convert_neon
 
     INPUT_BUF0      .req r5
     INPUT_BUF1      .req r6
-    INPUT_BUF2      .req INPUT_BUF
+    INPUT_BUF2      .req r1
 
     RGB             .req r7
     Y               .req r8
@@ -1786,7 +1786,7 @@ generate_jsimd_ycc_rgb_convert_neon rgb565,  16, 0, 0, 0
     vmlsl.u16       q15, d9, d1[3]
 .endm
 
-.balign 16
+.align 4
 jsimd_\colorid\()_ycc_neon_consts:
   .short 19595, 38470, 7471,  11059
   .short 21709, 32768, 27439, 5329
@@ -1802,7 +1802,7 @@ asm_function jsimd_\colorid\()_ycc_convert_neon
 
     OUTPUT_BUF0     .req r5
     OUTPUT_BUF1     .req r6
-    OUTPUT_BUF2     .req OUTPUT_BUF
+    OUTPUT_BUF2     .req r2
 
     RGB             .req r7
     Y               .req r8
@@ -1999,7 +1999,7 @@ asm_function jsimd_convsamp_neon
 #define XFIX_0_707106781 d0[2]
 #define XFIX_1_306562965 d0[3]
 
-.balign 16
+.align 4
 jsimd_fdct_ifast_neon_consts:
   .short (98 * 128)               /* XFIX_0_382683433 */
   .short (139 * 128)              /* XFIX_0_541196100 */
@@ -2465,7 +2465,8 @@ asm_function jsimd_h2v1_fancy_upsample_neon
     /*lsl             \PUT_BUFFER, \PUT_BUFFER, \SIZE*/
     add             \PUT_BITS, \SIZE
     /*orr             \PUT_BUFFER, \PUT_BUFFER, \CODE*/
-    orr             \PUT_BUFFER, \CODE, \PUT_BUFFER, lsl \SIZE
+    mov             \PUT_BUFFER, \PUT_BUFFER, lsl \SIZE
+    orr             \PUT_BUFFER, \CODE, \PUT_BUFFER
 .endm
 
 .macro checkbuf15 BUFFER, PUT_BUFFER, PUT_BITS, ZERO, TMP
@@ -2477,7 +2478,7 @@ asm_function jsimd_h2v1_fancy_upsample_neon
 15:
 .endm
 
-.balign 16
+.align 4
 jsimd_huff_encode_one_block_neon_consts:
   .byte 0x01
   .byte 0x02
