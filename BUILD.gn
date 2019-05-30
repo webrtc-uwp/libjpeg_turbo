@@ -169,7 +169,7 @@ static_library("simd") {
     sources = [
       "simd/jsimd_arm64.c"
     ]
-    if (current_os == "winuwp" && target_os == "winuwp") {
+    if (current_os == "winuwp" && target_os == "winuwp" && !is_clang) {
       sources += get_target_outputs(":compile_jsimd_arm_assembly")
       deps = [
         ":compile_jsimd_arm_assembly",
